@@ -314,24 +314,27 @@ function ActionBtns({onYes, onNo, t, lang, tts, fs}) {
   );
 }
 
-// ── MEDICATION SCREEN ──────────────────────────────────────────────────────────
 function MedScreen({t,lang,tts,fs,cplx,card,onDone}) {
-  const [retry,setRetry]=useState(false);
-  const desc = cplx==="s"?t.medS:cplx==="n"?t.medN:t.medM;
-  const displayText = retry ? t.retry : desc;
+  const [showRetryBox,setShowRetryBox]=useState(false);
+  const desc = cplx==="s" ? t.medS : cplx==="n" ? t.medN : t.medM;
+  const displayText = desc;
+
   return (
     <div style={{padding:"14px 14px 0"}}>
       <div style={{...card,textAlign:"center",background:"linear-gradient(135deg,#E5F1FF,#E1F5EC)",paddingBottom:12}}>
         <PackArt/>
         <div style={{fontWeight:800,fontSize:19*fs,marginTop:8,color:C.primary}}>{t.medName}</div>
       </div>
+
       <div style={card}>
-        {retry&&<div style={{fontSize:12*fs,color:C.muted,marginBottom:8,display:"flex",gap:5,alignItems:"center"}}><span>👆</span><span>{t.hear}</span></div>}
         <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
-          <div style={{flex:1,fontSize:17*fs,lineHeight:1.65,fontWeight:retry?700:400,color:C.txt}}>{displayText}</div>
+          <div style={{flex:1,fontSize:17*fs,lineHeight:1.65,fontWeight:400,color:C.txt}}>
+            {displayText}
+          </div>
           <SoundBtn text={displayText} lang={lang} tts={tts} sz={48}/>
         </div>
       </div>
+
       <div style={card}>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
           <div style={{fontWeight:700,fontSize:14*fs,color:C.txt}}>{t.tlabel}</div>
@@ -348,7 +351,39 @@ function MedScreen({t,lang,tts,fs,cplx,card,onDone}) {
           )}
         </div>
       </div>
-      <ActionBtns onYes={onDone} onNo={()=>{setRetry(true);doSay(t.retryLong||t.retry,lang,tts);}} t={t} lang={lang} tts={tts} fs={fs}/>
+
+      <ActionBtns
+        onYes={onDone}
+        onNo={() => {
+          setShowRetryBox(true);
+          doSay(t.retryLong || t.retry, lang, tts);
+        }}
+        t={t}
+        lang={lang}
+        tts={tts}
+        fs={fs}
+      />
+
+      {showRetryBox && (
+        <div
+          style={{
+            background: "#FFF8E1",
+            border: "1.5px solid #F9A825",
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 14,
+            color: C.txt,
+            boxShadow: "0 2px 8px rgba(0,0,0,.06)",
+          }}
+        >
+          <div style={{ fontWeight: 800, fontSize: 15 * fs, marginBottom: 8 }}>
+            {t.tlabel}
+          </div>
+          <div style={{ fontSize: 15 * fs, lineHeight: 1.65 }}>
+            {t.retryLong || t.retry}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -356,6 +391,7 @@ function MedScreen({t,lang,tts,fs,cplx,card,onDone}) {
 // ── RULES SCREEN ───────────────────────────────────────────────────────────────
 function RulesScreen({t,lang,tts,fs,card,onDone}) {
   const [open,setOpen]=useState(null);
+  const [showSummary,setShowSummary]=useState(false);
   const rules=[{id:"c",e:"☕",l:t.c1,w:t.c1w},{id:"a",e:"🍺",l:t.c2,w:t.c2w},{id:"s",e:"🌶️",l:t.c3,w:t.c3w}];
   return (
     <div style={{padding:"14px 14px 0"}}>
@@ -383,7 +419,38 @@ function RulesScreen({t,lang,tts,fs,card,onDone}) {
           {open===r.id&&<div style={{background:C.danLt,border:`2px solid ${C.danger}`,borderTop:"none",borderRadius:"0 0 14px 14px",padding:"14px 16px",fontSize:15*fs,lineHeight:1.65,color:C.txt,fontWeight:500}}>{r.w}</div>}
         </div>
       ))}
-      <ActionBtns onYes={onDone} onNo={()=>doSay(t.rulesSentence,lang,tts)} t={t} lang={lang} tts={tts} fs={fs}/>
+           <ActionBtns
+        onYes={onDone}
+        onNo={() => {
+          setShowSummary(true);
+          doSay(t.rulesSentence, lang, tts);
+        }}
+        t={t}
+        lang={lang}
+        tts={tts}
+        fs={fs}
+      />
+
+      {showSummary && (
+        <div
+          style={{
+            background: "#FFF8E1",
+            border: "1.5px solid #F9A825",
+            borderRadius: 16,
+            padding: 16,
+            marginBottom: 14,
+            color: C.txt,
+            boxShadow: "0 2px 8px rgba(0,0,0,.06)",
+          }}
+        >
+          <div style={{ fontWeight: 800, fontSize: 15 * fs, marginBottom: 8 }}>
+            {t.rtitle}
+          </div>
+          <div style={{ fontSize: 15 * fs, lineHeight: 1.65 }}>
+            {t.rulesSentence}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
