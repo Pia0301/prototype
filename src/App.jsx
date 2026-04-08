@@ -433,17 +433,67 @@ function SettingsScreen({lang,setLang,cplx,setCplx,tts,setTts,fs,setFs,t,card}) 
         </div>
       )}
 
-      {/* Complexity */}
-      <div style={card}>
-        <div style={{fontWeight:700,fontSize:15,marginBottom:12,color:C.txt}}>{t.slevel}</div>
-        <div style={{display:"flex",gap:6}}>
-          {[["s",t.ssimple,"🙂"],["n",t.sstd,"👨‍⚕️"],["m",t.smed,"🔬"]].map(([k,label,icon])=>(
-            <button key={k} onClick={()=>setCplx(k)} style={{flex:1,padding:"10px 4px",borderRadius:12,border:"none",cursor:"pointer",background:cplx===k?C.primary:"#F0F4F2",color:cplx===k?"#fff":C.muted,fontWeight:cplx===k?800:400,fontSize:13,transition:"all .18s",display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-              <span style={{fontSize:18}}>{icon}</span>{label}
-            </button>
-          ))}
+  {/* Complexity */}
+<div style={card}>
+  <div style={{
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12
+  }}>
+    <div style={{ fontWeight: 700, fontSize: 15, color: C.txt }}>
+      {t.slevel}
+    </div>
+
+    <SoundBtn text={t.slevel} lang={lang} tts={tts} sz={36} />
+  </div>
+
+  <div style={{ display: "flex", gap: 6 }}>
+    {[
+      ["s", t.ssimple, "🙂"],
+      ["n", t.sstd, "👨‍⚕️"],
+      ["m", t.smed, "🔬"],
+    ].map(([k, label, icon]) => (
+      <div
+        key={k}
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 6,
+        }}
+      >
+        <button
+          onClick={() => setCplx(k)}
+          style={{
+            width: "100%",
+            padding: "10px 4px",
+            borderRadius: 12,
+            border: "none",
+            cursor: "pointer",
+            background: cplx === k ? C.primary : "#F0F4F2",
+            color: cplx === k ? "#fff" : C.muted,
+            fontWeight: cplx === k ? 800 : 400,
+            fontSize: 13,
+            transition: "all .18s",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 3,
+            minHeight: 72,
+          }}
+        >
+          <span style={{ fontSize: 18 }}>{icon}</span>
+          <span style={{ textAlign: "center" }}>{label}</span>
+        </button>
+
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <SoundBtn text={label} lang={lang} tts={tts} sz={34} />
         </div>
       </div>
+    ))}
+  </div>
+</div>
 
       {/* TTS toggle */}
       <div style={rowCard}>
